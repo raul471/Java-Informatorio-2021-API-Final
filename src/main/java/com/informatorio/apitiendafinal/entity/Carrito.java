@@ -38,6 +38,10 @@ public class Carrito {
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Producto> productos = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "orden_id", referencedColumnName = "id")
+    private Orden orden;
 
     public Long getId() {
         return id;
@@ -111,4 +115,15 @@ public class Carrito {
     public void setEstadoCarrito(EstadoCarrito estadoCarrito) {
         this.estadoCarrito = estadoCarrito;
     }
+
+    @JsonIgnore
+    public Orden getOrden() {
+        return orden;
+    }
+
+    @JsonIgnore
+    public void setOrden(Orden orden) {
+        this.orden = orden;
+    }
+
 }

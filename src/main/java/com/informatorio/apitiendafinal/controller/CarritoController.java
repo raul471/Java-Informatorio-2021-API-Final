@@ -38,6 +38,7 @@ public class CarritoController {
                                 @RequestBody Carrito carrito){
         Usuario usuario = usuarioRepository.findById(id).get();
         carrito.setUsuario(usuario);
+        carrito.setEstadoCarrito(EstadoCarrito.ABIERTO);
         return carritoRepository.save(carrito);
     }
     @PutMapping(value = "/usuarios/{id}/carritos/{carritoId}/productos/{productoId}")
@@ -47,8 +48,11 @@ public class CarritoController {
         Usuario usuario = usuarioRepository.findById(id).get();
         Carrito carrito = carritoRepository.findById(carritoId).get();
         Producto producto = productoRepository.findById(productoId).get();
-        carrito.agregarProducto(producto);
-        return carritoRepository.save(carrito);
+        if(producto.getPublicado() == true){
+            carrito.agregarProducto(producto);
+            return carritoRepository.save(carrito);
+        }
+        return null;
     }
     @DeleteMapping(value = "/usuarios/{id}/carritos/{carritoId}/productos/{productoId}")
     public Carrito deletProductosDeCarrito(@PathVariable("id") Long id,
